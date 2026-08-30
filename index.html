@@ -1,0 +1,4052 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b1220">
+<meta name="description" content="GoSwift Taxi - Professional private hire booking platform">
+<title>GoSwift Taxi | Private Hire Platform</title>
+
+<style>
+:root{
+  --bg:#f4f7fb;
+  --surface:#ffffff;
+  --surface2:#f8fafc;
+  --dark:#0b1220;
+  --dark2:#111827;
+  --text:#172033;
+  --muted:#697586;
+  --border:#e5eaf1;
+  --primary:#16a34a;
+  --primary-dark:#15803d;
+  --danger:#dc2626;
+  --warning:#d97706;
+  --info:#2563eb;
+  --radius:18px;
+  --shadow:0 12px 35px rgba(15,23,42,.08);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+
+button,input,select,textarea{font:inherit}
+
+button{cursor:pointer;border:0}
+
+a{text-decoration:none;color:inherit}
+
+.hidden{display:none!important}
+
+/* LOGIN */
+
+#authScreen{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  background:
+    radial-gradient(circle at top left,#dcfce7,transparent 35%),
+    radial-gradient(circle at bottom right,#dbeafe,transparent 35%),
+    #f8fafc;
+}
+
+.auth-box{
+  width:min(1050px,100%);
+  min-height:650px;
+  background:#fff;
+  border-radius:28px;
+  box-shadow:0 30px 80px rgba(15,23,42,.15);
+  overflow:hidden;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+}
+
+.auth-brand{
+  background:linear-gradient(145deg,#07111f,#142238);
+  color:#fff;
+  padding:55px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-weight:900;
+  font-size:25px;
+}
+
+.logo-icon{
+  width:44px;
+  height:44px;
+  border-radius:13px;
+  background:var(--primary);
+  display:grid;
+  place-items:center;
+  font-size:23px;
+}
+
+.auth-brand h1{
+  font-size:46px;
+  line-height:1.05;
+  margin:35px 0 18px;
+}
+
+.auth-brand p{
+  color:#b7c2d3;
+  line-height:1.7;
+  max-width:470px;
+}
+
+.feature-list{
+  margin-top:35px;
+  display:grid;
+  gap:15px;
+}
+
+.feature-list div{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:#e7edf5;
+}
+
+.check{
+  width:24px;
+  height:24px;
+  border-radius:50%;
+  background:rgba(22,163,74,.2);
+  color:#4ade80;
+  display:grid;
+  place-items:center;
+}
+
+.auth-panel{
+  padding:55px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+.auth-panel h2{
+  font-size:31px;
+  margin-bottom:8px;
+}
+
+.auth-panel>p{
+  color:var(--muted);
+  margin-bottom:30px;
+}
+
+.role-selector{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  background:#f1f5f9;
+  padding:5px;
+  border-radius:13px;
+  margin-bottom:25px;
+}
+
+.role-selector button{
+  padding:11px 6px;
+  border-radius:9px;
+  background:transparent;
+  color:var(--muted);
+  font-weight:700;
+}
+
+.role-selector button.active{
+  background:#fff;
+  color:var(--text);
+  box-shadow:0 2px 8px rgba(15,23,42,.08);
+}
+
+.form-group{
+  margin-bottom:16px;
+}
+
+.form-group label{
+  display:block;
+  font-size:13px;
+  font-weight:700;
+  margin-bottom:7px;
+}
+
+.form-control{
+  width:100%;
+  padding:14px 15px;
+  border:1px solid var(--border);
+  border-radius:11px;
+  background:#fff;
+  outline:none;
+  transition:.2s;
+}
+
+.form-control:focus{
+  border-color:var(--primary);
+  box-shadow:0 0 0 3px rgba(22,163,74,.1);
+}
+
+.primary-btn{
+  width:100%;
+  padding:14px 18px;
+  background:var(--primary);
+  color:#fff;
+  border-radius:11px;
+  font-weight:800;
+  transition:.2s;
+}
+
+.primary-btn:hover{background:var(--primary-dark)}
+
+.demo-note{
+  text-align:center;
+  margin-top:15px;
+  font-size:12px;
+  color:var(--muted);
+}
+
+/* APPLICATION */
+
+#app{
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:260px 1fr;
+}
+
+.sidebar{
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  width:260px;
+  background:var(--dark);
+  color:#fff;
+  padding:22px 15px;
+  z-index:50;
+  overflow:auto;
+}
+
+.sidebar .logo{
+  padding:5px 10px 28px;
+}
+
+.sidebar .logo span:last-child{
+  font-size:20px;
+}
+
+.sidebar-section{
+  margin:20px 10px 9px;
+  color:#718096;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:1.3px;
+  text-transform:uppercase;
+}
+
+.nav{
+  display:grid;
+  gap:5px;
+}
+
+.nav button{
+  width:100%;
+  background:transparent;
+  color:#9aa8ba;
+  padding:12px 13px;
+  border-radius:11px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  text-align:left;
+  font-weight:650;
+}
+
+.nav button:hover,
+.nav button.active{
+  color:#fff;
+  background:#172235;
+}
+
+.nav-icon{
+  width:20px;
+  text-align:center;
+}
+
+.sidebar-bottom{
+  margin-top:30px;
+  border-top:1px solid #263247;
+  padding-top:18px;
+}
+
+.user-mini{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:8px;
+}
+
+.avatar{
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  background:#dbeafe;
+  color:#1e40af;
+  display:grid;
+  place-items:center;
+  font-weight:800;
+}
+
+.user-mini small{
+  display:block;
+  color:#7f8da2;
+  margin-top:2px;
+}
+
+.main{
+  grid-column:2;
+  min-width:0;
+}
+
+.topbar{
+  height:75px;
+  background:#fff;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 30px;
+  position:sticky;
+  top:0;
+  z-index:30;
+}
+
+.mobile-menu{
+  display:none;
+  background:transparent;
+  font-size:23px;
+}
+
+.topbar-title h2{
+  font-size:20px;
+}
+
+.topbar-title p{
+  font-size:12px;
+  color:var(--muted);
+  margin-top:3px;
+}
+
+.top-actions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.icon-btn{
+  width:40px;
+  height:40px;
+  border:1px solid var(--border);
+  background:#fff;
+  border-radius:11px;
+  position:relative;
+}
+
+.notification-dot{
+  position:absolute;
+  top:8px;
+  right:8px;
+  width:7px;
+  height:7px;
+  background:#ef4444;
+  border-radius:50%;
+}
+
+.content{
+  padding:30px;
+  max-width:1600px;
+  margin:auto;
+}
+
+/* GENERAL */
+
+.page{
+  display:none;
+}
+
+.page.active{
+  display:block;
+}
+
+.page-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  margin-bottom:25px;
+}
+
+.page-header h1{
+  font-size:28px;
+}
+
+.page-header p{
+  color:var(--muted);
+  margin-top:4px;
+}
+
+.btn{
+  padding:11px 15px;
+  border-radius:10px;
+  font-weight:750;
+  border:1px solid var(--border);
+  background:#fff;
+}
+
+.btn.primary{
+  background:var(--primary);
+  border-color:var(--primary);
+  color:#fff;
+}
+
+.btn.danger{
+  background:#fee2e2;
+  color:#991b1b;
+  border-color:#fecaca;
+}
+
+.btn.info{
+  background:#dbeafe;
+  color:#1d4ed8;
+  border-color:#bfdbfe;
+}
+
+.btn.warning{
+  background:#fef3c7;
+  color:#92400e;
+  border-color:#fde68a;
+}
+
+.grid{
+  display:grid;
+  gap:18px;
+}
+
+.stats-grid{
+  grid-template-columns:repeat(4,1fr);
+  margin-bottom:20px;
+}
+
+.stat-card{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:20px;
+  box-shadow:var(--shadow);
+}
+
+.stat-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.stat-icon{
+  width:43px;
+  height:43px;
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  background:#f1f5f9;
+  font-size:19px;
+}
+
+.stat-label{
+  color:var(--muted);
+  font-size:13px;
+  margin-top:15px;
+}
+
+.stat-value{
+  font-size:28px;
+  font-weight:850;
+  margin-top:3px;
+}
+
+.stat-change{
+  font-size:12px;
+  margin-top:5px;
+  color:var(--primary);
+}
+
+.card{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+}
+
+.card-header{
+  padding:19px 20px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.card-header h3{
+  font-size:16px;
+}
+
+.card-body{
+  padding:20px;
+}
+
+.two-col{
+  grid-template-columns:1.35fr .65fr;
+}
+
+.three-col{
+  grid-template-columns:repeat(3,1fr);
+}
+
+.status{
+  display:inline-flex;
+  padding:5px 9px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:800;
+}
+
+.status.green{background:#dcfce7;color:#166534}
+.status.red{background:#fee2e2;color:#991b1b}
+.status.yellow{background:#fef3c7;color:#92400e}
+.status.blue{background:#dbeafe;color:#1e40af}
+.status.gray{background:#f1f5f9;color:#475569}
+
+.table-wrap{
+  overflow:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:700px;
+}
+
+th,td{
+  padding:14px 16px;
+  border-bottom:1px solid var(--border);
+  text-align:left;
+  font-size:13px;
+}
+
+th{
+  color:#64748b;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+  background:#f8fafc;
+}
+
+tr:last-child td{border-bottom:0}
+
+.empty{
+  text-align:center;
+  padding:50px 20px;
+  color:var(--muted);
+}
+
+/* CUSTOMER BOOKING */
+
+.booking-layout{
+  display:grid;
+  grid-template-columns:1fr 390px;
+  gap:20px;
+}
+
+.map-panel{
+  min-height:590px;
+  background:
+    linear-gradient(rgba(255,255,255,.68),rgba(255,255,255,.68)),
+    repeating-linear-gradient(0deg,transparent 0,transparent 55px,#d8dee8 56px),
+    repeating-linear-gradient(90deg,transparent 0,transparent 55px,#d8dee8 56px),
+    #e9eef5;
+  border-radius:var(--radius);
+  position:relative;
+  overflow:hidden;
+  border:1px solid var(--border);
+}
+
+.map-road{
+  position:absolute;
+  background:#fff;
+  border:1px solid #d5dbe5;
+}
+
+.road1{
+  width:130%;
+  height:65px;
+  transform:rotate(-17deg);
+  top:47%;
+  left:-10%;
+}
+
+.road2{
+  width:65px;
+  height:130%;
+  transform:rotate(18deg);
+  top:-10%;
+  left:58%;
+}
+
+.map-marker{
+  position:absolute;
+  width:46px;
+  height:46px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  font-size:20px;
+  box-shadow:0 7px 18px rgba(15,23,42,.18);
+  border:4px solid #fff;
+}
+
+.pickup-marker{
+  left:28%;
+  top:35%;
+  background:#16a34a;
+  color:#fff;
+}
+
+.drop-marker{
+  right:24%;
+  bottom:28%;
+  background:#dc2626;
+  color:#fff;
+}
+
+.map-label{
+  position:absolute;
+  left:20px;
+  top:20px;
+  background:#fff;
+  padding:8px 12px;
+  border-radius:9px;
+  font-size:12px;
+  box-shadow:var(--shadow);
+}
+
+.booking-card{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:22px;
+  box-shadow:var(--shadow);
+}
+
+.booking-card h2{
+  font-size:20px;
+  margin-bottom:4px;
+}
+
+.booking-card>p{
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:22px;
+}
+
+.location-input{
+  position:relative;
+}
+
+.location-input .pin{
+  position:absolute;
+  left:13px;
+  top:13px;
+}
+
+.location-input input{
+  padding-left:38px;
+}
+
+.ride-types{
+  display:grid;
+  gap:8px;
+  margin-top:5px;
+}
+
+.ride-type{
+  border:1px solid var(--border);
+  padding:13px;
+  border-radius:11px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  cursor:pointer;
+}
+
+.ride-type.selected{
+  border-color:var(--primary);
+  background:#f0fdf4;
+}
+
+.ride-type-left{
+  display:flex;
+  gap:11px;
+  align-items:center;
+}
+
+.car-icon{
+  width:39px;
+  height:39px;
+  border-radius:10px;
+  background:#f1f5f9;
+  display:grid;
+  place-items:center;
+}
+
+.fare-box{
+  margin-top:18px;
+  background:#0b1220;
+  color:#fff;
+  border-radius:14px;
+  padding:17px;
+}
+
+.fare-row{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:8px;
+  color:#b9c3d2;
+  font-size:12px;
+}
+
+.fare-total{
+  display:flex;
+  justify-content:space-between;
+  border-top:1px solid #273248;
+  padding-top:12px;
+  margin-top:10px;
+  font-size:20px;
+  font-weight:850;
+  color:#fff;
+}
+
+/* DRIVER */
+
+.driver-status{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+.online-control{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.toggle{
+  width:55px;
+  height:30px;
+  background:#cbd5e1;
+  border-radius:20px;
+  position:relative;
+  cursor:pointer;
+}
+
+.toggle::after{
+  content:"";
+  width:24px;
+  height:24px;
+  background:#fff;
+  position:absolute;
+  top:3px;
+  left:3px;
+  border-radius:50%;
+  transition:.2s;
+  box-shadow:0 2px 5px rgba(0,0,0,.2);
+}
+
+.toggle.on{background:var(--primary)}
+.toggle.on::after{left:28px}
+
+.job-card{
+  border:1px solid var(--border);
+  border-radius:15px;
+  padding:17px;
+  margin-bottom:12px;
+}
+
+.job-head{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:15px;
+}
+
+.route{
+  display:grid;
+  gap:12px;
+  margin:13px 0;
+}
+
+.route-line{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+}
+
+.route-dot{
+  width:11px;
+  height:11px;
+  border-radius:50%;
+  background:var(--primary);
+  margin-top:4px;
+}
+
+.route-dot.red{background:var(--danger)}
+
+.route-line div:last-child{
+  font-size:13px;
+  line-height:1.45;
+}
+
+.job-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+
+/* ADMIN */
+
+.chart{
+  height:260px;
+  display:flex;
+  align-items:end;
+  gap:10px;
+  padding:20px 10px 0;
+}
+
+.bar{
+  flex:1;
+  background:#16a34a;
+  opacity:.85;
+  border-radius:7px 7px 0 0;
+  position:relative;
+  min-width:12px;
+}
+
+.bar span{
+  position:absolute;
+  bottom:-22px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:10px;
+  color:var(--muted);
+}
+
+.progress{
+  height:8px;
+  border-radius:20px;
+  background:#e2e8f0;
+  overflow:hidden;
+}
+
+.progress div{
+  height:100%;
+  background:var(--primary);
+  border-radius:20px;
+}
+
+/* MODAL */
+
+.modal-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(2,8,23,.55);
+  backdrop-filter:blur(4px);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  z-index:100;
+}
+
+.modal-overlay.show{display:flex}
+
+.modal{
+  background:#fff;
+  width:min(560px,100%);
+  max-height:90vh;
+  overflow:auto;
+  border-radius:20px;
+  box-shadow:0 30px 80px rgba(0,0,0,.25);
+}
+
+.modal-header{
+  padding:20px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  justify-content:space-between;
+}
+
+.modal-body{padding:20px}
+
+.close{
+  width:34px;
+  height:34px;
+  border-radius:9px;
+  background:#f1f5f9;
+}
+
+/* TOAST */
+
+.toast{
+  position:fixed;
+  right:25px;
+  bottom:25px;
+  background:#0b1220;
+  color:#fff;
+  padding:14px 17px;
+  border-radius:12px;
+  box-shadow:0 15px 40px rgba(0,0,0,.2);
+  z-index:200;
+  transform:translateY(100px);
+  opacity:0;
+  transition:.3s;
+  max-width:350px;
+}
+
+.toast.show{
+  transform:translateY(0);
+  opacity:1;
+}
+
+/* MOBILE */
+
+@media(max-width:1050px){
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .booking-layout{grid-template-columns:1fr}
+  .map-panel{min-height:400px}
+  .two-col{grid-template-columns:1fr}
+}
+
+@media(max-width:800px){
+  #app{display:block}
+
+  .sidebar{
+    transform:translateX(-100%);
+    transition:.25s;
+    box-shadow:10px 0 40px rgba(0,0,0,.15);
+  }
+
+  .sidebar.open{transform:translateX(0)}
+
+  .mobile-menu{display:block}
+
+  .topbar{
+    padding:0 15px;
+  }
+
+  .content{padding:18px 15px}
+
+  .topbar-title h2{font-size:17px}
+
+  .topbar-title p{display:none}
+
+  .auth-box{
+    grid-template-columns:1fr;
+  }
+
+  .auth-brand{
+    display:none;
+  }
+
+  .auth-panel{
+    padding:35px 25px;
+  }
+
+  .stats-grid{grid-template-columns:1fr 1fr}
+
+  .three-col{grid-template-columns:1fr}
+
+  .page-header{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+}
+
+@media(max-width:500px){
+  .stats-grid{grid-template-columns:1fr}
+
+  .stat-value{font-size:24px}
+
+  .booking-card{padding:17px}
+
+  .map-panel{min-height:320px}
+
+  .driver-status{
+    align-items:flex-start;
+    gap:15px;
+    flex-direction:column;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================================================
+     AUTHENTICATION
+========================================================= -->
+
+<section id="authScreen">
+
+  <div class="auth-box">
+
+    <div class="auth-brand">
+
+      <div class="logo">
+        <div class="logo-icon">🚕</div>
+        <span>GoSwift Taxi</span>
+      </div>
+
+      <h1>Your journey.<br>Our priority.</h1>
+
+      <p>
+        A professional private-hire booking platform connecting
+        passengers, licensed drivers and your operations team.
+      </p>
+
+      <div class="feature-list">
+        <div><span class="check">✓</span> Fast local & airport bookings</div>
+        <div><span class="check">✓</span> Professional driver network</div>
+        <div><span class="check">✓</span> Transparent fare estimates</div>
+        <div><span class="check">✓</span> Secure digital trip records</div>
+      </div>
+
+    </div>
+
+    <div class="auth-panel">
+
+      <h2>Welcome back</h2>
+      <p>Choose your portal and sign in.</p>
+
+      <div class="role-selector">
+
+        <button class="active" data-role="customer">
+          Customer
+        </button>
+
+        <button data-role="driver">
+          Driver
+        </button>
+
+        <button data-role="admin">
+          Admin
+        </button>
+
+      </div>
+
+      <form id="loginForm">
+
+        <div class="form-group">
+          <label>Email address</label>
+          <input
+            class="form-control"
+            id="loginEmail"
+            type="email"
+            placeholder="you@example.com"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label>Password</label>
+          <input
+            class="form-control"
+            id="loginPassword"
+            type="password"
+            placeholder="••••••••"
+            required
+          >
+        </div>
+
+        <button class="primary-btn" type="submit">
+          Sign in
+        </button>
+
+      </form>
+
+      <div class="demo-note">
+        Front-end authentication interface — connect your secure backend in production.
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     MAIN APPLICATION
+========================================================= -->
+
+<div id="app" class="hidden">
+
+  <!-- SIDEBAR -->
+
+  <aside class="sidebar" id="sidebar">
+
+    <div class="logo">
+      <div class="logo-icon">🚕</div>
+      <span>GoSwift</span>
+    </div>
+
+    <div class="sidebar-section">Main</div>
+
+    <nav class="nav" id="navMenu"></nav>
+
+    <div class="sidebar-bottom">
+
+      <div class="user-mini">
+
+        <div class="avatar" id="sidebarAvatar">
+          TA
+        </div>
+
+        <div>
+          <strong id="sidebarName">Tahir</strong>
+          <small id="sidebarRole">Customer</small>
+        </div>
+
+      </div>
+
+      <button class="nav logout-btn" onclick="logout()">
+        <span class="nav-icon">↪</span>
+        Sign out
+      </button>
+
+    </div>
+
+  </aside>
+
+
+  <!-- MAIN -->
+
+  <main class="main">
+
+    <header class="topbar">
+
+      <div style="display:flex;align-items:center;gap:12px">
+
+        <button class="mobile-menu" onclick="toggleSidebar()">
+          ☰
+        </button>
+
+        <div class="topbar-title">
+          <h2 id="topTitle">Customer Dashboard</h2>
+          <p id="topSubtitle">Manage your journeys and bookings</p>
+        </div>
+
+      </div>
+
+      <div class="top-actions">
+
+        <button class="icon-btn" onclick="showNotifications()">
+          🔔
+          <span class="notification-dot"></span>
+        </button>
+
+        <div class="avatar" id="topAvatar">TA</div>
+
+      </div>
+
+    </header>
+
+
+    <section class="content">
+
+
+      <!-- =====================================================
+           CUSTOMER DASHBOARD
+      ====================================================== -->
+
+      <div class="page" id="customerDashboard">
+
+        <div class="page-header">
+
+          <div>
+            <h1>Good morning 👋</h1>
+            <p>Where would you like to go today?</p>
+          </div>
+
+          <button class="btn primary"
+                  onclick="navigate('customerBook')">
+            + Book a ride
+          </button>
+
+        </div>
+
+        <div class="grid stats-grid">
+
+          <div class="stat-card">
+            <div class="stat-top">
+              <div class="stat-icon">🚕</div>
+            </div>
+            <div class="stat-label">Completed rides</div>
+            <div class="stat-value">28</div>
+            <div class="stat-change">↑ 4 this month</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-top">
+              <div class="stat-icon">💷</div>
+            </div>
+            <div class="stat-label">Total spent</div>
+            <div class="stat-value">£486</div>
+            <div class="stat-change">This year</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-top">
+              <div class="stat-icon">⭐</div>
+            </div>
+            <div class="stat-label">Passenger rating</div>
+            <div class="stat-value">5.0</div>
+            <div class="stat-change">Excellent</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-top">
+              <div class="stat-icon">📅</div>
+            </div>
+            <div class="stat-label">Upcoming trips</div>
+            <div class="stat-value">2</div>
+            <div class="stat-change">Next: tomorrow</div>
+          </div>
+
+        </div>
+
+
+        <div class="grid two-col">
+
+          <div class="card">
+
+            <div class="card-header">
+              <h3>Recent journeys</h3>
+              <button class="btn" onclick="navigate('customerHistory')">
+                View all
+              </button>
+            </div>
+
+            <div class="table-wrap">
+
+              <table>
+
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Route</th>
+                    <th>Driver</th>
+                    <th>Fare</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+
+                <tbody id="customerRecentTrips"></tbody>
+
+              </table>
+
+            </div>
+
+          </div>
+
+
+          <div class="card">
+
+            <div class="card-header">
+              <h3>Saved places</h3>
+            </div>
+
+            <div class="card-body">
+
+              <div class="job-card">
+                <strong>🏠 Home</strong>
+                <p style="color:var(--muted);font-size:12px;margin-top:5px">
+                  Nottingham
+                </p>
+              </div>
+
+              <div class="job-card">
+                <strong>💼 Work</strong>
+                <p style="color:var(--muted);font-size:12px;margin-top:5px">
+                  City Centre
+                </p>
+              </div>
+
+              <button class="btn" style="width:100%">
+                + Add saved place
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =====================================================
+           CUSTOMER BOOK
+      ====================================================== -->
+
+      <div class="page" id="customerBook">
+
+        <div class="page-header">
+
+          <div>
+            <h1>Book a ride</h1>
+            <p>Enter your journey details and choose your vehicle.</p>
+          </div>
+
+        </div>
+
+        <div class="booking-layout">
+
+          <div class="map-panel">
+
+            <div class="map-label">
+              📍 Live route preview
+            </div>
+
+            <div class="map-road road1"></div>
+            <div class="map-road road2"></div>
+
+            <div class="map-marker pickup-marker">A</div>
+            <div class="map-marker drop-marker">B</div>
+
+          </div>
+
+
+          <div class="booking-card">
+
+            <h2>Your journey</h2>
+            <p>Pickup and destination</p>
+
+            <div class="form-group location-input">
+              <span class="pin">🟢</span>
+              <input
+                id="pickup"
+                class="form-control"
+                placeholder="Pickup location"
+                value="Nottingham City Centre"
+                oninput="calculateFare()"
+              >
+            </div>
+
+            <div class="form-group location-input">
+              <span class="pin">🔴</span>
+              <input
+                id="destination"
+                class="form-control"
+                placeholder="Where to?"
+                value="East Midlands Airport"
+                oninput="calculateFare()"
+              >
+            </div>
+
+            <div class="form-group">
+
+              <label>Journey type</label>
+
+              <select class="form-control" id="bookingType">
+                <option>Now</option>
+                <option>Schedule for later</option>
+              </select>
+
+            </div>
+
+            <div class="form-group">
+
+              <label>Choose vehicle</label>
+
+              <div class="ride-types">
+
+                <div class="ride-type selected"
+                     data-price="1"
+                     onclick="selectRide(this,'Standard')">
+
+                  <div class="ride-type-left">
+                    <div class="car-icon">🚗</div>
+                    <div>
+                      <strong>Standard</strong>
+                      <div style="font-size:11px;color:var(--muted)">
+                        Up to 4 passengers
+                      </div>
+                    </div>
+                  </div>
+
+                  <strong>£18–£24</strong>
+
+                </div>
+
+
+                <div class="ride-type"
+                     data-price="1.35"
+                     onclick="selectRide(this,'Executive')">
+
+                  <div class="ride-type-left">
+                    <div class="car-icon">🚘</div>
+                    <div>
+                      <strong>Executive</strong>
+                      <div style="font-size:11px;color:var(--muted)">
+                        Premium vehicle
+                      </div>
+                    </div>
+                  </div>
+
+                  <strong>£25–£32</strong>
+
+                </div>
+
+
+                <div class="ride-type"
+                     data-price="1.65"
+                     onclick="selectRide(this,'XL')">
+
+                  <div class="ride-type-left">
+                    <div class="car-icon">🚐</div>
+                    <div>
+                      <strong>XL</strong>
+                      <div style="font-size:11px;color:var(--muted)">
+                        Up to 6 passengers
+                      </div>
+                    </div>
+                  </div>
+
+                  <strong>£30–£40</strong>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label>Payment</label>
+
+              <select class="form-control">
+                <option>💳 Visa •••• 4242</option>
+                <option>Apple Pay</option>
+                <option>Google Pay</option>
+                <option>Cash to driver</option>
+              </select>
+
+            </div>
+
+
+            <div class="fare-box">
+
+              <div class="fare-row">
+                <span>Estimated distance</span>
+                <span id="distanceEstimate">18.4 miles</span>
+              </div>
+
+              <div class="fare-row">
+                <span>Estimated journey time</span>
+                <span>32 min</span>
+              </div>
+
+              <div class="fare-row">
+                <span>Base fare</span>
+                <span id="baseFare">£18.00</span>
+              </div>
+
+              <div class="fare-total">
+                <span>Estimated fare</span>
+                <span id="fareTotal">£22.50</span>
+              </div>
+
+            </div>
+
+            <button class="primary-btn"
+                    style="margin-top:17px"
+                    onclick="requestRide()">
+              🚕 Request ride
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =====================================================
+           CUSTOMER ACTIVE RIDE
+      ====================================================== -->
+
+      <div class="page" id="customerActive">
+
+        <div class="page-header">
+          <div>
+            <h1>Your ride</h1>
+            <p>Your driver is on the way.</p>
+          </div>
+          <span class="status green">DRIVER EN ROUTE</span>
+        </div>
+
+        <div class="grid two-col">
+
+          <div class="map-panel">
+            <div class="map-label">🚗 Driver location updating</div>
+            <div class="map-road road1"></div>
+            <div class="map-road road2"></div>
+            <div class="map-marker pickup-marker">🚗</div>
+            <div class="map-marker drop-marker">B</div>
+          </div>
+
+          <div class="card">
+
+            <div class="card-header">
+              <h3>Driver details</h3>
+            </div>
+
+            <div class="card-body">
+
+              <div style="display:flex;align-items:center;gap:14px;margin-bottom:22px">
+
+                <div class="avatar" style="width:55px;height:55px">
+                  JS
+                </div>
+
+                <div>
+                  <strong style="font-size:17px">James Smith</strong>
+                  <div style="color:var(--muted);font-size:12px">
+                    ★ 4.98 • 2,340 trips
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="job-card">
+
+                <div class="route">
+
+                  <div class="route-line">
+                    <div class="route-dot"></div>
+                    <div>
+                      <strong>Pickup</strong><br>
+                      Nottingham City Centre
+                    </div>
+                  </div>
+
+                  <div class="route-line">
+                    <div class="route-dot red"></div>
+                    <div>
+                      <strong>Destination</strong><br>
+                      East Midlands Airport
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+
+                <button class="btn info"
+                        onclick="showToast('Calling driver…')">
+                  📞 Call
+                </button>
+
+                <button class="btn"
+                        onclick="showToast('Chat opened')">
+                  💬 Message
+                </button>
+
+              </div>
+
+              <button class="btn danger"
+                      style="width:100%;margin-top:8px"
+                      onclick="cancelRide()">
+                Cancel ride
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =====================================================
+           CUSTOMER HISTORY
+      ====================================================== -->
+
+      <div class="page" id="customerHistory">
+
+        <div class="page-header">
+          <div>
+            <h1>Ride history</h1>
+            <p>All your completed and cancelled journeys.</p>
+          </div>
+        </div>
+
+        <div class="card">
+
+          <div class="card-header">
+
+            <input
+              class="form-control"
+              style="max-width:300px"
+              placeholder="Search journeys..."
+              oninput="filterTrips(this.value)"
+            >
+
+            <button class="btn">
+              ↓ Export
+            </button>
+
+          </div>
+
+          <div class="table-wrap">
+
+            <table>
+
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Booking ID</th>
+                  <th>Route</th>
+                  <th>Driver</th>
+                  <th>Vehicle</th>
+                  <th>Fare</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+
+              <tbody id="historyTable"></tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =====================================================
+           CUSTOMER PROFILE
+      ====================================================== -->
+
+      <div class="page" id="customerProfile">
+
+        <div class="page-header">
+          <div>
+            <h1>My profile</h1>
+            <p>Manage your personal information and preferences.</p>
+          </div>
+        </div>
+
+        <div class="card">
+
+          <div class="card-body">
+
+            <div style="display:flex;align-items:center;gap:18px;margin-bottom:25px">
+
+              <div class="avatar"
+                   style="width:75px;height:75px;font-size:22px">
+                TA
+              </div>
+
+              <div>
+                <h2>Tahir Ali</h2>
+                <p style="color:var(--muted)">
+                  Customer account
+                </p>
+              </div>
+
+            </div>
+
+            <div class="grid three-col">
+
+              <div class="form-group">
+                <label>First name</label>
+                <input class="form-control" value="Tahir">
+              </div>
+
+              <div class="form-group">
+                <label>Last name</label>
+                <input class="form-control" value="Ali">
+              </div>
+
+              <div class="form-group">
+                <label>Phone</label>
+                <input class="form-control" value="+44 7958 000000">
+              </div>
+
+              <div class="form-group">
+                <label>Email</label>
+                <input class="form-control" value="customer@example.com">
+              </div>
+
+              <div class="form-group">
+                <label>Default payment</label>
+                <select class="form-control">
+                  <option>Visa •••• 4242</option>
+                  <option>Apple Pay</option>
+                </select>
+              </div>
+
+            </div>
+
+            <button class="btn primary"
+                    onclick="showToast('Profile changes saved')">
+              Save changes
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =====================================================
+           DRIVER DASHBOARD
+      ====================================================== -->
+
+      <div class="page" id="driverDashboard">
+
+        <div class="page-header">
+
+          <div>
+            <h1>Driver dashboard</h1>
+            <p>Manage your availability, trips and earnings.</p>
+          </div>
+
+        </div>
+
+        <div class="driver-status">
+
+          <div>
+            <strong>Driver availability</strong>
+            <p style="font-size:12px;color:var(--muted);margin-top:4px"
+               id="availabilityText">
+              You are currently offline.
+            </p>
+          </div>
+
+          <div class="online-control">
+
+            <strong id="onlineLabel">OFFLINE</strong>
+
+            <div class="toggle" id="driverToggle"
+                 onclick="toggleDriverOnline()"></div>
+
+          </div>
+
+        </div>
+
+
+        <div class="grid stats-grid">
+
+          <div class="stat-card">
+            <div class="stat-icon">💷</div>
+            <div class="stat-label">Today's earnings</div>
+            <div class="stat-value">£142.80</div>
+            <div class="stat-change">↑ 12.4%</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">🚕</div>
+            <div class="stat-label">Today's trips</div>
+            <div class="stat-value">11</div>
+            <div class="stat-change">+2 vs yesterday</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">⭐</div>
+            <div class="stat-label">Driver rating</div>
+            <div class="stat-value">4.98</div>
+            <div class="stat-change">Excellent</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">⏱️</div>
+            <div class="stat-label">Online today</div>
+            <div class="stat-value">7h 24m</div>
+            <div class="stat-change">Active</div>
+          </div>
+
+        </div>
+
+
+        <div class="grid two-col">
+
+          <div class="card">
+
+            <div class="card-header">
+              <h3>Incoming requests</h3>
+              <span class="status green">LIVE</span>
+            </div>
+
+            <div class="card-body" id="driverJobs"></div>
+
+          </div>
+
+
+          <div class="card">
+
+            <div class="card-header">
+              <h3>Today's earnings</h3>
+            </div>
+
+            <div class="card-body">
+
+              <div style="font-size:36px;font-weight:900">
+                £142.80
+              </div>
+
+              <p style="color:var(--muted);font-size:12px;margin-top:5px">
+                Before platform fees
+              </p>
+
+              <div style="margin-top:25px">
+
+                <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:8px">
+                  <span>Target</span>
+                  <strong>£200</strong>
+                </div>
+
+                <div class="progress">
+                  <div style="width:71%"></div>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =====================================================
+           DRIVER TRIPS
+      ====================================================== -->
+
+      <div class="page" id="driverTrips">
+
+        <div class="page-header">
+          <div>
+            <h1>My trips</h1>
+            <p>Your completed private-hire journeys.</p>
+          </div>
+        </div>
+
+        <div class="card">
+
+          <div class="table-wrap">
+
+            <table>
+
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Booking</th>
+                  <th>Passenger</th>
+                  <th>Route</th>
+                  <th>Fare</th>
+                  <th>Your earnings</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+
+              <tbody>
+
+                <tr>
+                  <td>30 Aug 2026</td>
+                  <td>#GS10281</td>
+                  <td>Michael R.</td>
+                  <td>Nottingham → Airport</td>
+                  <td>£28.50</td>
+                  <td>£23.10</td>
+                  <td><span class="status green">Completed</span></td>
+                </tr>
+
+                <tr>
+                  <td>30 Aug 2026</td>
+                  <td>#GS10279</td>
+                  <td>Sarah K.</td>
+                  <td>Beeston → City</td>
+                  <td>£16.80</td>
+                  <td>£13.61</td>
+                  <td><span class="status green">Completed</span></td>
+                </tr>
+
+                <tr>
+                  <td>29 Aug 2026</td>
+                  <td>#GS10255</td>
+                  <td>David P.</td>
+                  <td>West Bridgford → City</td>
+                  <td>£13.40</td>
+                  <td>£10.85</td>
+                  <td><span class="status green">Completed</span></td>
+                </tr>
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =====================================================
+           DRIVER EARNINGS
+      ====================================================== -->
+
+      <div class="page" id="driverEarnings">
+
+        <div class="page-header">
+          <div>
+            <h1>Earnings</h1>
+            <p>Track your earnings and payouts.</p>
+          </div>
+          <button class="btn primary"
+                  onclick="showToast('Payout request submitted')">
+            Request payout
+          </button>
+        </div>
+
+        <div class="grid stats-grid">
+
+          <div class="stat-card">
+            <div class="stat-icon">💷</div>
+            <div class="stat-label">Available balance</div>
+            <div class="stat-value">£428.50</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">📈</div>
+            <div class="stat-label">This week</div>
+            <div class="stat-value">£812.40</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">📅</div>
+            <div class="stat-label">This month</div>
+            <div class="stat-value">£2,840</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">💳</div>
+            <div class="stat-label">Last payout</div>
+            <div class="stat-value">£650</div>
+          </div>
+
+        </div>
+
+        <div class="card">
+
+          <div class="card-header">
+            <h3>Payout history</h3>
+          </div>
+
+          <div class="table-wrap">
+
+            <table>
+
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Reference</th>
+                  <th>Amount</th>
+                  <th>Method</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+
+              <tbody>
+
+                <tr>
+                  <td>28 Aug 2026</td>
+                  <td>PAY-88421</td>
+                  <td>£650.00</td>
+                  <td>Bank transfer</td>
+                  <td><span class="status green">Paid</span></td>
+                </tr>
+
+                <tr>
+                  <td>21 Aug 2026</td>
+                  <td>PAY-88012</td>
+                  <td>£580.00</td>
+                  <td>Bank transfer</td>
+                  <td><span class="status green">Paid</span></td>
+                </tr>
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =====================================================
+           DRIVER PROFILE
+      ====================================================== -->
+
+      <div class="page" id="driverProfile">
+
+        <div class="page-header">
+          <div>
+            <h1>Driver profile</h1>
+            <p>Manage your driver and vehicle information.</p>
+          </div>
+        </div>
+
+        <div class="card">
+
+          <div class="card-body">
+
+            <div class="grid three-col">
+
+              <div class="form-group">
+                <label>First name</label>
+                <input class="form-control" value="James">
+              </div>
+
+              <div class="form-group">
+                <label>Last name</label>
+                <input class="form-control" value="Smith">
+              </div>
+
+              <div class="form-group">
+                <label>Phone</label>
+                <input class="form-control" value="+44 7700 000000">
+              </div>
+
+              <div class="form-group">
+                <label>Vehicle make</label>
+                <input class="form-control" value="Toyota">
+              </div>
+
+              <div class="form-group">
+                <label>Vehicle model</label>
+                <input class="form-control" value="Prius">
+              </div>
+
+              <div class="form-group">
+                <label>Vehicle colour</label>
+                <input class="form-control" value="Black">
+              </div>
+
+              <div class="form-group">
+                <label>Private hire licence</label>
+                <input class="form-control" value="LIC-XXXXX">
+              </div>
+
+              <div class="form-group">
+                <label>Insurance status</label>
+                <select class="form-control">
+                  <option>Verified</option>
+                  <option>Pending</option>
+                </select>
+              </div>
+
+            </div>
+
+            <button class="btn primary"
+                    onclick="showToast('Driver profile saved')">
+              Save profile
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =====================================================
+           ADMIN DASHBOARD
+      ====================================================== -->
+
+      <div class="page" id="adminDashboard">
+
+        <div class="page-header">
+
+          <div>
+            <h1>Operations dashboard</h1>
+            <p>Monitor your private-hire platform.</p>
+          </div>
+
+          <span class="status green">SYSTEM OPERATIONAL</span>
+
+        </div>
+
+
+        <div class="grid stats-grid">
+
+          <div class="stat-card">
+            <div class="stat-icon">🚕</div>
+            <div class="stat-label">Live rides</div>
+            <div class="stat-value">24</div>
+            <div class="stat-change">↑ 8.2%</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">👨‍✈️</div>
+            <div class="stat-label">Drivers online</div>
+            <div class="stat-value">86</div>
+            <div class="stat-change">12 available</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-label">Customers</div>
+            <div class="stat-value">8,421</div>
+            <div class="stat-change">+128 this week</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">💷</div>
+            <div class="stat-label">Today's revenue</div>
+            <div class="stat-value">£8,642</div>
+            <div class="stat-change">↑ 14.8%</div>
+          </div>
+
+        </div>
+
+
+        <div class="grid two-col">
+
+          <div class="card">
+
+            <div class="card-header">
+              <h3>Revenue overview</h3>
+              <select class="form-control" style="width:130px">
+                <option>Last 7 days</option>
+                <option>Last 30 days</option>
+              </select>
+            </div>
+
+            <div class="card-body">
+
+              <div style="font-size:30px;font-weight:900">
+                £48,290
+              </div>
+
+              <div class="chart">
+
+                <div class="bar" style="height:42%">
+                  <span>Mon</span>
+                </div>
+
+                <div class="bar" style="height:58%">
+                  <span>Tue</span>
+                </div>
+
+                <div class="bar" style="height:49%">
+                  <span>Wed</span>
+                </div>
+
+                <div class="bar" style="height:73%">
+                  <span>Thu</span>
+                </div>
+
+                <div class="bar" style="height:66%">
+                  <span>Fri</span>
+                </div>
+
+                <div class="bar" style="height:88%">
+                  <span>Sat</span>
+                </div>
+
+                <div class="bar" style="height:79%">
+                  <span>Sun</span>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="card">
+
+            <div class="card-header">
+              <h3>Platform health</h3>
+            </div>
+
+            <div class="card-body">
+
+              <div style="margin-bottom:20px">
+
+                <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:7px">
+                  <span>Driver acceptance</span>
+                  <strong>92%</strong>
+                </div>
+
+                <div class="progress">
+                  <div style="width:92%"></div>
+                </div>
+
+              </div>
+
+              <div style="margin-bottom:20px">
+
+                <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:7px">
+                  <span>Ride completion</span>
+                  <strong>98.4%</strong>
+                </div>
+
+                <div class="progress">
+                  <div style="width:98.4%"></div>
+                </div>
+
+              </div>
+
+              <div>
+
+                <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:7px">
+                  <span>Payment success</span>
+                  <strong>99.1%</strong>
+                </div>
+
+                <div class="progress">
+                  <div style="width:99.1%"></div>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =====================================================
+           ADMIN RIDES
+      ====================================================== -->
+
+      <div class="page" id="adminRides">
+
+        <div class="page-header">
+
+          <div>
+            <h1>Live rides</h1>
+            <p>Monitor current bookings and journeys.</p>
+          </div>
+
+          <button class="btn primary"
+                  onclick="showToast('Ride data refreshed')">
+            ↻ Refresh
+          </button>
+
+        </div>
+
+        <div class="card">
+
+          <div class="table-wrap">
+
+            <table>
+
+              <thead>
+                <tr>
+                  <th>Booking</th>
+                  <th>Customer</th>
+                  <th>Driver</th>
+                  <th>Pickup</th>
+                  <th>Destination</th>
+                  <th>Fare</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+
+              <tbody>
+
+                <tr>
+                  <td>#GS10482</td>
+                  <td>Michael R.</td>
+                  <td>James Smith</td>
+                  <td>West Bridgford</td>
+                  <td>East Midlands Airport</td>
+                  <td>£31.20</td>
+                  <td><span class="status blue">En route</span></td>
+                  <td><button class="btn info">Track</button></td>
+                </tr>
+
+                <tr>
+                  <td>#GS10481</td>
+                  <td>Sarah K.</td>
+                  <td>David Brown</td>
+                  <td>Beeston</td>
+                  <td>Nottingham Centre</td>
+                  <td>£14.80</td>
+                  <td><span class="status yellow">Waiting</span></td>
+                  <td><button class="btn info">View</button></td>
+                </tr>
+
+                <tr>
+                  <td>#GS10479</td>
+                  <td>Amir H.</td>
+                  <td>John Wilson</td>
+                  <td>Arnold</td>
+                  <td>City Hospital</td>
+                  <td>£19.40</td>
+                  <td><span class="status blue">Passenger onboard</span></td>
+                  <td><button class="btn info">Track</button></td>
+                </tr>
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =====================================================
+           ADMIN DRIVERS
+      ====================================================== -->
+
+      <div class="page" id="adminDrivers">
+
+        <div class="page-header">
+
+          <div>
+            <h1>Driver management</h1>
+            <p>Manage your driver network and licence status.</p>
+          </div>
+
+          <button class="btn primary"
+                  onclick="openModal('Add driver')">
+            + Add driver
+          </button>
+
+        </div>
+
+        <div class="card">
+
+          <div class="table-wrap">
+
+            <table>
+
+              <thead>
+                <tr>
+                  <th>Driver</th>
+                  <th>Licence</th>
+                  <th>Vehicle</th>
+                  <th>Rating</th>
+                  <th>Trips</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+
+              <tbody>
+
+                <tr>
+                  <td>
+                    <strong>James Smith</strong><br>
+                    <small>james@example.com</small>
+                  </td>
+                  <td>PHV-10281</td>
+                  <td>Toyota Prius</td>
+                  <td>⭐ 4.98</td>
+                  <td>2,340</td>
+                  <td><span class="status green">Online</span></td>
+                  <td><button class="btn info">Manage</button></td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <strong>David Brown</strong><br>
+                    <small>david@example.com</small>
+                  </td>
+                  <td>PHV-10244</td>
+                  <td>Kia Niro</td>
+                  <td>⭐ 4.91</td>
+                  <td>1,822</td>
+                  <td><span class="status gray">Offline</span></td>
+                  <td><button class="btn info">Manage</button></td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <strong>John Wilson</strong><br>
+                    <small>john@example.com</small>
+                  </td>
+                  <td>PHV-10122</td>
+                  <td>Mercedes E-Class</td>
+                  <td>⭐ 4.97</td>
+                  <td>3,102</td>
+                  <td><span class="status green">Online</span></td>
+                  <td><button class="btn info">Manage</button></td>
+                </tr>
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =====================================================
+           ADMIN CUSTOMERS
+      ====================================================== -->
+
+      <div class="page" id="adminCustomers">
+
+        <div class="page-header">
+
+          <div>
+            <h1>Customers</h1>
+            <p>Manage passenger accounts.</p>
+          </div>
+
+        </div>
+
+        <div class="card">
+
+          <div class="table-wrap">
+
+            <table>
+
+              <thead>
+                <tr>
+                  <th>Customer</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Trips</th>
+                  <th>Spent</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+
+              <tbody>
+
+                <tr>
+                  <td><strong>Michael Roberts</strong></td>
+                  <td>michael@example.com</td>
+                  <td>07700 111222</td>
+                  <td>84</td>
+                  <td>£1,482</td>
+                  <td><span class="status green">Active</span></td>
+                  <td><button class="btn info">View</button></td>
+                </tr>
+
+                <tr>
+                  <td><strong>Sarah Khan</strong></td>
+                  <td>sarah@example.com</td>
+                  <td>07700 333444</td>
+                  <td>42</td>
+                  <td>£712</td>
+                  <td><span class="status green">Active</span></td>
+                  <td><button class="btn info">View</button></td>
+                </tr>
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =====================================================
+           ADMIN PAYMENTS
+      ====================================================== -->
+
+      <div class="page" id="adminPayments">
+
+        <div class="page-header">
+
+          <div>
+            <h1>Payments</h1>
+            <p>Monitor customer payments and driver earnings.</p>
+          </div>
+
+        </div>
+
+        <div class="grid stats-grid">
+
+          <div class="stat-card">
+            <div class="stat-icon">💳</div>
+            <div class="stat-label">Gross payments today</div>
+            <div class="stat-value">£10,482</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">💷</div>
+            <div class="stat-label">Driver earnings</div>
+            <div class="stat-value">£8,240</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">📊</div>
+            <div class="stat-label">Platform revenue</div>
+            <div class="stat-value">£2,242</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">⚠️</div>
+            <div class="stat-label">Payment issues</div>
+            <div class="stat-value">3</div>
+          </div>
+
+        </div>
+
+        <div class="card">
+
+          <div class="table-wrap">
+
+            <table>
+
+              <thead>
+                <tr>
+                  <th>Payment ID</th>
+                  <th>Booking</th>
+                  <th>Customer</th>
+                  <th>Amount</th>
+                  <th>Platform fee</th>
+                  <th>Driver</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+
+              <tbody>
+
+                <tr>
+                  <td>PAY-88421</td>
+                  <td>#GS10482</td>
+                  <td>Michael R.</td>
+                  <td>£31.20</td>
+                  <td>£6.24</td>
+                  <td>£24.96</td>
+                  <td><span class="status green">Paid</span></td>
+                </tr>
+
+                <tr>
+                  <td>PAY-88420</td>
+                  <td>#GS10481</td>
+                  <td>Sarah K.</td>
+                  <td>£14.80</td>
+                  <td>£2.96</td>
+                  <td>£11.84</td>
+                  <td><span class="status green">Paid</span></td>
+                </tr>
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =====================================================
+           ADMIN REPORTS
+      ====================================================== -->
+
+      <div class="page" id="adminReports">
+
+        <div class="page-header">
+
+          <div>
+            <h1>Reports & analytics</h1>
+            <p>Business performance overview.</p>
+          </div>
+
+          <button class="btn">
+            ↓ Export report
+          </button>
+
+        </div>
+
+        <div class="grid three-col">
+
+          <div class="card">
+
+            <div class="card-header">
+              <h3>Trips</h3>
+            </div>
+
+            <div class="card-body">
+
+              <div style="font-size:32px;font-weight:900">
+                12,842
+              </div>
+
+              <p style="color:var(--primary);font-size:12px;margin-top:5px">
+                ↑ 18.4% vs last month
+              </p>
+
+            </div>
+
+          </div>
+
+          <div class="card">
+
+            <div class="card-header">
+              <h3>Average fare</h3>
+            </div>
+
+            <div class="card-body">
+
+              <div style="font-size:32px;font-weight:900">
+                £22.40
+              </div>
+
+              <p style="color:var(--primary);font-size:12px;margin-top:5px">
+                ↑ 4.2%
+              </p>
+
+            </div>
+
+          </div>
+
+          <div class="card">
+
+            <div class="card-header">
+              <h3>Cancellation rate</h3>
+            </div>
+
+            <div class="card-body">
+
+              <div style="font-size:32px;font-weight:900">
+                2.8%
+              </div>
+
+              <p style="color:var(--primary);font-size:12px;margin-top:5px">
+                ↓ 0.7%
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =====================================================
+           ADMIN SETTINGS
+      ====================================================== -->
+
+      <div class="page" id="adminSettings">
+
+        <div class="page-header">
+
+          <div>
+            <h1>Platform settings</h1>
+            <p>Configure operational settings.</p>
+          </div>
+
+        </div>
+
+        <div class="card">
+
+          <div class="card-body">
+
+            <div class="grid two-col">
+
+              <div>
+
+                <h3 style="margin-bottom:18px">
+                  General settings
+                </h3>
+
+                <div class="form-group">
+                  <label>Company name</label>
+                  <input class="form-control"
+                         value="GoSwift Taxi">
+                </div>
+
+                <div class="form-group">
+                  <label>Default currency</label>
+                  <select class="form-control">
+                    <option>GBP (£)</option>
+                    <option>EUR (€)</option>
+                    <option>USD ($)</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label>Base fare</label>
+                  <input class="form-control"
+                         value="£3.50">
+                </div>
+
+                <div class="form-group">
+                  <label>Per-mile rate</label>
+                  <input class="form-control"
+                         value="£1.80">
+                </div>
+
+              </div>
+
+
+              <div>
+
+                <h3 style="margin-bottom:18px">
+                  Operations
+                </h3>
+
+                <div class="job-card">
+
+                  <strong>Automatic driver matching</strong>
+
+                  <p style="font-size:12px;color:var(--muted);margin:5px 0 12px">
+                    Automatically offer bookings to suitable drivers.
+                  </p>
+
+                  <div class="toggle on"></div>
+
+                </div>
+
+                <div class="job-card">
+
+                  <strong>Scheduled bookings</strong>
+
+                  <p style="font-size:12px;color:var(--muted);margin:5px 0 12px">
+                    Allow passengers to pre-book journeys.
+                  </p>
+
+                  <div class="toggle on"></div>
+
+                </div>
+
+                <div class="job-card">
+
+                  <strong>Cash payments</strong>
+
+                  <p style="font-size:12px;color:var(--muted);margin:5px 0 12px">
+                    Allow cash payment to approved drivers.
+                  </p>
+
+                  <div class="toggle"></div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <button class="btn primary"
+                    onclick="showToast('Settings saved')">
+              Save settings
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+    </section>
+
+  </main>
+
+</div>
+
+
+<!-- =========================================================
+     MODAL
+========================================================= -->
+
+<div class="modal-overlay" id="modalOverlay">
+
+  <div class="modal">
+
+    <div class="modal-header">
+
+      <h3 id="modalTitle">Modal</h3>
+
+      <button class="close"
+              onclick="closeModal()">
+        ✕
+      </button>
+
+    </div>
+
+    <div class="modal-body" id="modalBody">
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- TOAST -->
+
+<div class="toast" id="toast"></div>
+
+
+<script>
+
+/* ============================================================
+   APPLICATION STATE
+============================================================ */
+
+const state = {
+
+  role: "customer",
+
+  currentPage: "customerDashboard",
+
+  selectedRide: "Standard",
+
+  fareMultiplier: 1,
+
+  driverOnline: false,
+
+  activeRide: false,
+
+  user: {
+    name: "Tahir Ali",
+    initials: "TA"
+  }
+
+};
+
+
+/* ============================================================
+   NAVIGATION CONFIGURATION
+============================================================ */
+
+const menus = {
+
+  customer: [
+
+    {
+      section:"Main"
+    },
+
+    {
+      id:"customerDashboard",
+      label:"Dashboard",
+      icon:"⌂"
+    },
+
+    {
+      id:"customerBook",
+      label:"Book a ride",
+      icon:"🚕"
+    },
+
+    {
+      id:"customerActive",
+      label:"Active ride",
+      icon:"📍"
+    },
+
+    {
+      section:"Account"
+    },
+
+    {
+      id:"customerHistory",
+      label:"Ride history",
+      icon:"🕘"
+    },
+
+    {
+      id:"customerProfile",
+      label:"Profile",
+      icon:"👤"
+    }
+
+  ],
+
+  driver: [
+
+    {
+      section:"Driver"
+    },
+
+    {
+      id:"driverDashboard",
+      label:"Dashboard",
+      icon:"⌂"
+    },
+
+    {
+      id:"driverTrips",
+      label:"My trips",
+      icon:"🚕"
+    },
+
+    {
+      id:"driverEarnings",
+      label:"Earnings",
+      icon:"💷"
+    },
+
+    {
+      section:"Account"
+    },
+
+    {
+      id:"driverProfile",
+      label:"Driver profile",
+      icon:"👤"
+    }
+
+  ],
+
+  admin: [
+
+    {
+      section:"Operations"
+    },
+
+    {
+      id:"adminDashboard",
+      label:"Dashboard",
+      icon:"⌂"
+    },
+
+    {
+      id:"adminRides",
+      label:"Live rides",
+      icon:"📍"
+    },
+
+    {
+      section:"Management"
+    },
+
+    {
+      id:"adminDrivers",
+      label:"Drivers",
+      icon:"👨‍✈️"
+    },
+
+    {
+      id:"adminCustomers",
+      label:"Customers",
+      icon:"👥"
+    },
+
+    {
+      id:"adminPayments",
+      label:"Payments",
+      icon:"💳"
+    },
+
+    {
+      id:"adminReports",
+      label:"Reports",
+      icon:"📊"
+    },
+
+    {
+      id:"adminSettings",
+      label:"Settings",
+      icon:"⚙️"
+    }
+
+  ]
+
+};
+
+
+/* ============================================================
+   AUTH ROLE SELECTOR
+============================================================ */
+
+document.querySelectorAll(".role-selector button")
+.forEach(button => {
+
+  button.addEventListener("click", () => {
+
+    document
+      .querySelectorAll(".role-selector button")
+      .forEach(btn => btn.classList.remove("active"));
+
+    button.classList.add("active");
+
+    state.role = button.dataset.role;
+
+  });
+
+});
+
+
+/* ============================================================
+   LOGIN
+============================================================ */
+
+document
+.getElementById("loginForm")
+.addEventListener("submit", function(e){
+
+  e.preventDefault();
+
+  login(state.role);
+
+});
+
+
+function login(role){
+
+  state.role = role;
+
+  document
+    .getElementById("authScreen")
+    .classList.add("hidden");
+
+  document
+    .getElementById("app")
+    .classList.remove("hidden");
+
+  buildNavigation();
+
+  const firstPage = {
+
+    customer:"customerDashboard",
+    driver:"driverDashboard",
+    admin:"adminDashboard"
+
+  }[role];
+
+  navigate(firstPage);
+
+  updateUserUI();
+
+  showToast(
+    `Signed in as ${role.charAt(0).toUpperCase()+role.slice(1)}`
+  );
+
+}
+
+
+/* ============================================================
+   NAVIGATION
+============================================================ */
+
+function buildNavigation(){
+
+  const nav = document.getElementById("navMenu");
+
+  nav.innerHTML = "";
+
+  menus[state.role].forEach(item => {
+
+    if(item.section){
+
+      const section = document.createElement("div");
+
+      section.className = "sidebar-section";
+
+      section.textContent = item.section;
+
+      nav.appendChild(section);
+
+      return;
+
+    }
+
+    const button = document.createElement("button");
+
+    button.dataset.page = item.id;
+
+    button.innerHTML = `
+      <span class="nav-icon">${item.icon}</span>
+      <span>${item.label}</span>
+    `;
+
+    button.addEventListener("click", () => {
+
+      navigate(item.id);
+
+      document
+        .getElementById("sidebar")
+        .classList.remove("open");
+
+    });
+
+    nav.appendChild(button);
+
+  });
+
+}
+
+
+function navigate(page){
+
+  document
+    .querySelectorAll(".page")
+    .forEach(p => p.classList.remove("active"));
+
+  const target = document.getElementById(page);
+
+  if(!target)return;
+
+  target.classList.add("active");
+
+  state.currentPage = page;
+
+  document
+    .querySelectorAll("#navMenu button")
+    .forEach(button => {
+
+      button.classList.toggle(
+        "active",
+        button.dataset.page === page
+      );
+
+    });
+
+  updateHeader(page);
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+}
+
+
+/* ============================================================
+   HEADER
+============================================================ */
+
+function updateHeader(page){
+
+  const titles = {
+
+    customerDashboard:[
+      "Customer Dashboard",
+      "Manage your journeys and bookings"
+    ],
+
+    customerBook:[
+      "Book a ride",
+      "Choose your journey and vehicle"
+    ],
+
+    customerActive:[
+      "Active ride",
+      "Track your current journey"
+    ],
+
+    customerHistory:[
+      "Ride history",
+      "Your completed journeys"
+    ],
+
+    customerProfile:[
+      "My profile",
+      "Account and preferences"
+    ],
+
+    driverDashboard:[
+      "Driver Dashboard",
+      "Manage your availability and jobs"
+    ],
+
+    driverTrips:[
+      "My trips",
+      "Completed driver journeys"
+    ],
+
+    driverEarnings:[
+      "Earnings",
+      "Track earnings and payouts"
+    ],
+
+    driverProfile:[
+      "Driver profile",
+      "Driver and vehicle information"
+    ],
+
+    adminDashboard:[
+      "Operations Dashboard",
+      "Platform overview"
+    ],
+
+    adminRides:[
+      "Live rides",
+      "Monitor current journeys"
+    ],
+
+    adminDrivers:[
+      "Driver management",
+      "Manage your driver network"
+    ],
+
+    adminCustomers:[
+      "Customers",
+      "Manage passenger accounts"
+    ],
+
+    adminPayments:[
+      "Payments",
+      "Monitor platform payments"
+    ],
+
+    adminReports:[
+      "Reports & analytics",
+      "Business performance"
+    ],
+
+    adminSettings:[
+      "Platform settings",
+      "Configure your system"
+    ]
+
+  };
+
+  const info = titles[page] || ["GoSwift",""];
+
+  document.getElementById("topTitle").textContent = info[0];
+
+  document.getElementById("topSubtitle").textContent = info[1];
+
+}
+
+
+/* ============================================================
+   USER UI
+============================================================ */
+
+function updateUserUI(){
+
+  document.getElementById("sidebarName")
+    .textContent = state.user.name;
+
+  document.getElementById("sidebarRole")
+    .textContent =
+      state.role.charAt(0).toUpperCase()+state.role.slice(1);
+
+  document.getElementById("sidebarAvatar")
+    .textContent = state.user.initials;
+
+  document.getElementById("topAvatar")
+    .textContent = state.user.initials;
+
+}
+
+
+/* ============================================================
+   FARE CALCULATOR
+============================================================ */
+
+function calculateFare(){
+
+  const base = 18;
+
+  const multiplier = state.fareMultiplier;
+
+  const variation =
+    Math.random() * 5;
+
+  const total =
+    (base + variation) * multiplier;
+
+  document.getElementById("baseFare")
+    .textContent =
+      "£" + (base * multiplier).toFixed(2);
+
+  document.getElementById("fareTotal")
+    .textContent =
+      "£" + total.toFixed(2);
+
+}
+
+
+function selectRide(element,type){
+
+  document
+    .querySelectorAll(".ride-type")
+    .forEach(item =>
+      item.classList.remove("selected")
+    );
+
+  element.classList.add("selected");
+
+  state.selectedRide = type;
+
+  state.fareMultiplier =
+    Number(element.dataset.price);
+
+  calculateFare();
+
+}
+
+
+/* ============================================================
+   REQUEST RIDE
+============================================================ */
+
+function requestRide(){
+
+  const pickup =
+    document.getElementById("pickup").value.trim();
+
+  const destination =
+    document.getElementById("destination").value.trim();
+
+  if(!pickup || !destination){
+
+    showToast("Please enter pickup and destination.");
+
+    return;
+
+  }
+
+  state.activeRide = true;
+
+  navigate("customerActive");
+
+  showToast(
+    "Ride requested. Searching for a driver..."
+  );
+
+  setTimeout(() => {
+
+    showToast(
+      "Driver James Smith has accepted your ride."
+    );
+
+  },2500);
+
+}
+
+
+/* ============================================================
+   CANCEL RIDE
+============================================================ */
+
+function cancelRide(){
+
+  const confirmed =
+    confirm("Are you sure you want to cancel this ride?");
+
+  if(!confirmed)return;
+
+  state.activeRide = false;
+
+  navigate("customerBook");
+
+  showToast("Ride cancelled.");
+
+}
+
+
+/* ============================================================
+   DRIVER ONLINE
+============================================================ */
+
+function toggleDriverOnline(){
+
+  state.driverOnline =
+    !state.driverOnline;
+
+  const toggle =
+    document.getElementById("driverToggle");
+
+  const label =
+    document.getElementById("onlineLabel");
+
+  const text =
+    document.getElementById("availabilityText");
+
+  toggle.classList.toggle(
+    "on",
+    state.driverOnline
+  );
+
+  if(state.driverOnline){
+
+    label.textContent = "ONLINE";
+
+    text.textContent =
+      "You are available for new bookings.";
+
+    showToast("You are now online.");
+
+  }else{
+
+    label.textContent = "OFFLINE";
+
+    text.textContent =
+      "You are currently offline.";
+
+    showToast("You are now offline.");
+
+  }
+
+}
+
+
+/* ============================================================
+   DRIVER JOBS
+============================================================ */
+
+function renderDriverJobs(){
+
+  const container =
+    document.getElementById("driverJobs");
+
+  if(!container)return;
+
+  container.innerHTML = `
+
+    <div class="job-card">
+
+      <div class="job-head">
+        <strong>New booking</strong>
+        <span class="status green">£28–£34</span>
+      </div>
+
+      <div class="route">
+
+        <div class="route-line">
+          <div class="route-dot"></div>
+          <div>
+            <strong>Pickup</strong><br>
+            Nottingham City Centre
+          </div>
+        </div>
+
+        <div class="route-line">
+          <div class="route-dot red"></div>
+          <div>
+            <strong>Destination</strong><br>
+            East Midlands Airport
+          </div>
+        </div>
+
+      </div>
+
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:12px">
+        <span>18.4 miles</span>
+        <span>32 min</span>
+      </div>
+
+      <div class="job-actions">
+
+        <button class="btn danger"
+                onclick="declineJob(this)">
+          Decline
+        </button>
+
+        <button class="btn primary"
+                onclick="acceptJob(this)">
+          Accept
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div class="job-card">
+
+      <div class="job-head">
+        <strong>New booking</strong>
+        <span class="status blue">£16–£20</span>
+      </div>
+
+      <div class="route">
+
+        <div class="route-line">
+          <div class="route-dot"></div>
+          <div>
+            <strong>Pickup</strong><br>
+            Beeston
+          </div>
+        </div>
+
+        <div class="route-line">
+          <div class="route-dot red"></div>
+          <div>
+            <strong>Destination</strong><br>
+            Nottingham Station
+          </div>
+        </div>
+
+      </div>
+
+      <div class="job-actions">
+
+        <button class="btn danger"
+                onclick="declineJob(this)">
+          Decline
+        </button>
+
+        <button class="btn primary"
+                onclick="acceptJob(this)">
+          Accept
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+function acceptJob(button){
+
+  button
+    .closest(".job-card")
+    .innerHTML = `
+
+      <div style="text-align:center;padding:18px">
+
+        <div style="font-size:35px">🚗</div>
+
+        <h3 style="margin-top:8px">
+          Booking accepted
+        </h3>
+
+        <p style="color:var(--muted);font-size:12px;margin:6px 0 15px">
+          Navigate to the passenger pickup.
+        </p>
+
+        <button class="btn primary"
+                onclick="showToast('Navigation opened')">
+          Open navigation
+        </button>
+
+      </div>
+
+    `;
+
+  showToast("Booking accepted.");
+
+}
+
+
+function declineJob(button){
+
+  button
+    .closest(".job-card")
+    .remove();
+
+  showToast("Booking declined.");
+
+}
+
+
+/* ============================================================
+   CUSTOMER TABLES
+============================================================ */
+
+const trips = [
+
+  {
+    date:"30 Aug 2026",
+    id:"#GS10281",
+    route:"Nottingham → Airport",
+    driver:"James Smith",
+    vehicle:"Toyota Prius",
+    fare:"£31.20",
+    status:"Completed"
+  },
+
+  {
+    date:"28 Aug 2026",
+    id:"#GS10252",
+    route:"West Bridgford → City",
+    driver:"David Brown",
+    vehicle:"Kia Niro",
+    fare:"£15.80",
+    status:"Completed"
+  },
+
+  {
+    date:"25 Aug 2026",
+    id:"#GS10188",
+    route:"City → Beeston",
+    driver:"John Wilson",
+    vehicle:"Mercedes E-Class",
+    fare:"£19.40",
+    status:"Completed"
+  },
+
+  {
+    date:"20 Aug 2026",
+    id:"#GS10094",
+    route:"Nottingham → Airport",
+    driver:"James Smith",
+    vehicle:"Toyota Prius",
+    fare:"£29.80",
+    status:"Completed"
+  }
+
+];
+
+
+function renderCustomerTables(){
+
+  const recent =
+    document.getElementById("customerRecentTrips");
+
+  const history =
+    document.getElementById("historyTable");
+
+  if(recent){
+
+    recent.innerHTML =
+      trips.slice(0,4).map(trip => `
+
+        <tr>
+
+          <td>${trip.date}</td>
+
+          <td>${trip.route}</td>
+
+          <td>${trip.driver}</td>
+
+          <td>${trip.fare}</td>
+
+          <td>
+            <span class="status green">
+              ${trip.status}
+            </span>
+          </td>
+
+        </tr>
+
+      `).join("");
+
+  }
+
+  if(history){
+
+    history.innerHTML =
+      trips.map(trip => `
+
+        <tr>
+
+          <td>${trip.date}</td>
+
+          <td>${trip.id}</td>
+
+          <td>${trip.route}</td>
+
+          <td>${trip.driver}</td>
+
+          <td>${trip.vehicle}</td>
+
+          <td>${trip.fare}</td>
+
+          <td>
+            <span class="status green">
+              ${trip.status}
+            </span>
+          </td>
+
+        </tr>
+
+      `).join("");
+
+  }
+
+}
+
+
+function filterTrips(value){
+
+  const query =
+    value.toLowerCase();
+
+  const filtered =
+    trips.filter(trip =>
+      JSON.stringify(trip)
+        .toLowerCase()
+        .includes(query)
+    );
+
+  document.getElementById("historyTable")
+    .innerHTML =
+      filtered.map(trip => `
+
+        <tr>
+
+          <td>${trip.date}</td>
+          <td>${trip.id}</td>
+          <td>${trip.route}</td>
+          <td>${trip.driver}</td>
+          <td>${trip.vehicle}</td>
+          <td>${trip.fare}</td>
+          <td>
+            <span class="status green">
+              ${trip.status}
+            </span>
+          </td>
+
+        </tr>
+
+      `).join("");
+
+}
+
+
+/* ============================================================
+   MODALS
+============================================================ */
+
+function openModal(title){
+
+  document.getElementById("modalTitle")
+    .textContent = title;
+
+  document.getElementById("modalBody")
+    .innerHTML = `
+
+      <div class="form-group">
+        <label>Full name</label>
+        <input class="form-control"
+               placeholder="Driver name">
+      </div>
+
+      <div class="form-group">
+        <label>Email</label>
+        <input class="form-control"
+               type="email"
+               placeholder="driver@example.com">
+      </div>
+
+      <div class="form-group">
+        <label>Phone</label>
+        <input class="form-control"
+               placeholder="+44">
+      </div>
+
+      <div class="form-group">
+        <label>Private hire licence number</label>
+        <input class="form-control"
+               placeholder="Licence number">
+      </div>
+
+      <button class="primary-btn"
+              onclick="closeModal();showToast('Driver record created')">
+        Create driver
+      </button>
+
+    `;
+
+  document
+    .getElementById("modalOverlay")
+    .classList.add("show");
+
+}
+
+
+function closeModal(){
+
+  document
+    .getElementById("modalOverlay")
+    .classList.remove("show");
+
+}
+
+
+/* ============================================================
+   NOTIFICATIONS
+============================================================ */
+
+function showNotifications(){
+
+  openSimpleModal(
+    "Notifications",
+    `
+
+      <div class="job-card">
+        <strong>🚕 Driver accepted your ride</strong>
+        <p style="font-size:12px;color:var(--muted);margin-top:5px">
+          James Smith is heading to your pickup.
+        </p>
+      </div>
+
+      <div class="job-card">
+        <strong>💳 Payment successful</strong>
+        <p style="font-size:12px;color:var(--muted);margin-top:5px">
+          Your last journey payment was completed.
+        </p>
+      </div>
+
+      <div class="job-card">
+        <strong>⭐ Rate your driver</strong>
+        <p style="font-size:12px;color:var(--muted);margin-top:5px">
+          Your recent trip is waiting for a rating.
+        </p>
+      </div>
+
+    `
+  );
+
+}
+
+
+function openSimpleModal(title,body){
+
+  document.getElementById("modalTitle")
+    .textContent = title;
+
+  document.getElementById("modalBody")
+    .innerHTML = body;
+
+  document
+    .getElementById("modalOverlay")
+    .classList.add("show");
+
+}
+
+
+/* ============================================================
+   TOAST
+============================================================ */
+
+let toastTimer;
+
+function showToast(message){
+
+  const toast =
+    document.getElementById("toast");
+
+  toast.textContent = message;
+
+  toast.classList.add("show");
+
+  clearTimeout(toastTimer);
+
+  toastTimer =
+    setTimeout(() => {
+
+      toast.classList.remove("show");
+
+    },3000);
+
+}
+
+
+/* ============================================================
+   MOBILE SIDEBAR
+============================================================ */
+
+function toggleSidebar(){
+
+  document
+    .getElementById("sidebar")
+    .classList.toggle("open");
+
+}
+
+
+/* ============================================================
+   LOGOUT
+============================================================ */
+
+function logout(){
+
+  document
+    .getElementById("app")
+    .classList.add("hidden");
+
+  document
+    .getElementById("authScreen")
+    .classList.remove("hidden");
+
+  state.activeRide = false;
+
+  showToast("You have been signed out.");
+
+}
+
+
+/* ============================================================
+   LOCAL STORAGE
+============================================================ */
+
+function saveState(){
+
+  localStorage.setItem(
+    "goswift_state",
+    JSON.stringify(state)
+  );
+
+}
+
+
+function loadState(){
+
+  try{
+
+    const saved =
+      localStorage.getItem("goswift_state");
+
+    if(!saved)return;
+
+    const parsed =
+      JSON.parse(saved);
+
+    Object.assign(state,parsed);
+
+  }catch(error){
+
+    console.warn("Could not load saved state.");
+
+  }
+
+}
+
+
+/* ============================================================
+   INITIALISE
+============================================================ */
+
+loadState();
+
+renderCustomerTables();
+
+renderDriverJobs();
+
+calculateFare();
+
+
+/*
+===============================================================
+NEXT PRODUCTION INTEGRATION POINTS
+
+This single file currently provides the complete interface layer.
+
+Production APIs should replace the following functions:
+
+login()
+requestRide()
+calculateFare()
+toggleDriverOnline()
+acceptJob()
+declineJob()
+renderCustomerTables()
+
+Recommended backend endpoints:
+
+POST   /api/auth/register
+POST   /api/auth/login
+POST   /api/auth/logout
+
+GET    /api/customers/me
+PATCH  /api/customers/me
+
+POST   /api/rides
+GET    /api/rides
+GET    /api/rides/:id
+PATCH  /api/rides/:id/status
+POST   /api/rides/:id/cancel
+
+GET    /api/drivers/me
+PATCH  /api/drivers/me
+PATCH  /api/drivers/availability
+
+GET    /api/driver/jobs
+POST   /api/driver/jobs/:id/accept
+POST   /api/driver/jobs/:id/decline
+
+GET    /api/driver/earnings
+POST   /api/driver/payouts
+
+GET    /api/admin/dashboard
+GET    /api/admin/rides
+GET    /api/admin/drivers
+GET    /api/admin/customers
+GET    /api/admin/payments
+GET    /api/admin/reports
+PATCH  /api/admin/settings
+
+Production services to connect:
+
+- PostgreSQL database
+- Secure authentication / JWT or session cookies
+- Maps / geocoding / routing
+- Real-time driver GPS
+- WebSockets
+- Push notifications
+- Stripe / SumUp payment processing
+- Driver payout system
+- Email/SMS verification
+- Document and licence verification
+- Audit logging
+- GDPR controls
+- Rate limiting
+- HTTPS
+- Admin permissions
+- Backup and monitoring
+
+IMPORTANT:
+Never put secret API keys, payment secret keys, database passwords,
+JWT signing secrets or other credentials inside this HTML file.
+===============================================================
+*/
+
+</script>
+
+</body>
+</html>
