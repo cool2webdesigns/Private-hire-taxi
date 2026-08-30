@@ -1,0 +1,13 @@
+Customer
+   ↓
+Website / iPhone / Android
+   ↓
+Secure API
+   ↓
+Database
+   ↓
+Payment Provider
+   ↓
+Company Account
+   ↓
+Driver Payout
