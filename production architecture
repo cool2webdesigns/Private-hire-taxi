@@ -1,0 +1,34 @@
+private-hire-platform/
+│
+├── customer-web/
+│   └── index.html
+│
+├── driver-web/
+│   └── index.html
+│
+├── admin/
+│   └── index.html
+│
+├── server/
+│   ├── authentication
+│   ├── bookings
+│   ├── drivers
+│   ├── customers
+│   ├── payments
+│   ├── payouts
+│   ├── notifications
+│   └── GPS/dispatch
+│
+├── database/
+│   ├── customers
+│   ├── drivers
+│   ├── vehicles
+│   ├── bookings
+│   ├── payments
+│   └── payouts
+│
+├── mobile/
+│   ├── customer app
+│   └── driver app
+│
+└── README.md
